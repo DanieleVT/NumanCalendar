@@ -28,7 +28,7 @@ The fixed days are:
 * **Idus**: the 15th day for long months, the 13th for the short ones (*full moon*)
 
 The length in days of the 13th month depends on the position of the year in the cicle and subcicle.
-The calendar is supposed to start the 1 March of 753 BC (the year of Rome founding).
+The calendar is supposed to start the *1 March of 753 BC* (the year of Rome founding).
 
 | Subcicle | Year  | Days in Year | Leap days | Total days |
 | :----: | ----:| -----:|----:| -----:|
@@ -88,7 +88,7 @@ $date = $NC->getDMY();
  * Get the Numan date in Roman traditional format.
  * For example, Kal. Martius IX A.U.C.
  */
-$NC->getRomanDate();
+$rdate = $NC->getRomanDate();
 
 ```
 
