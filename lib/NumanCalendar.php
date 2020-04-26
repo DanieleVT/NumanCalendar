@@ -190,8 +190,13 @@ class NumanCalendar {
         $this->JD = $JD;
         $this->JDToNuman();
     }
-        
-    public function getYearInfo($year=NULL){
+    
+    /**
+     * Return info about year
+     * @param int $year
+     * @return mixed[]
+     */    
+    public function getYearInfo(int $year=NULL){
         $yearInCicle = ($year===NULL) 
             ? $this->year_in_cicle 
             : $this->yearInCicle($year);
@@ -232,7 +237,7 @@ class NumanCalendar {
      * 
      * @param int $d day
      * @param int $m month
-     * @return string|bool
+     * @return string|boolean
      */
     public function isFixedDay(int $d = NULL, int $m = NULL){
         if ($d === NULL) $d = $this->day;
@@ -440,7 +445,7 @@ class NumanCalendar {
      * @param int $d
      * @return string
      */
-    private function romanDate(int $y, int $m, int $d){
+    protected function romanDate(int $y, int $m, int $d){
         $ml = $this->days_in_months[$m-1];
         
         $nonae = ($ml == 31) ? 7 : 5;
