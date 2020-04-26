@@ -217,7 +217,7 @@ class NumanCalendar {
         $d = $this->day;
         $m = $this->month;
         $y = $this->year;
-        return sprintf("%s/%s/%s", $d, $m, $y);
+        return sprintf("%02d/%02d/%04d", $d, $m, $y);
     }
     
     /*
