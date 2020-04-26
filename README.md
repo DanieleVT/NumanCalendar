@@ -89,7 +89,23 @@ $date = $NC->getDMY();
  * For example, Kal. Martius IX A.U.C.
  */
 $rdate = $NC->getRomanDate();
+```
 
+The *NumanFestivals* class gives informations about traditional Roman festivals and holidays.
+It can be used as following:
+
+```php
+$NF = new NumanFestivals;
+
+$today = date('d/m/Y');
+list($d, $m, $y) = explode('/', $today);
+$NF->setGregorianDate((int)$y, (int)$m, (int)$d);
+
+// Array ( [0] => Veneralia ) 
+$festival = $NF->isFestival();
+
+// Array ( [fixed] => Kalendae [festival] => Array ( [0] => Veneralia ) [date] => Kal. Aprilis MMDCCLXXIII A.U.C. ) 
+$di = $NF->getDayInfo();
 ```
 
 ## Contributing
