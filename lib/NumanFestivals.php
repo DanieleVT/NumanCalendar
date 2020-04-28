@@ -236,12 +236,16 @@ class NumanFestivals extends NumanCalendar
         
         $fixed = $this->isFixedDay($d, $m);
         $festival = $this->isFestival($d, $m);
+        $month = $this->getMonthName($m);
+        $date = $this->getDMY();
         $romanDate = $this->romanDate($y, $m, $d);
         
         return array(
             'fixed' => $fixed,
             'festival' => $festival,
-            'date' => $romanDate,
+            'month' => $month,
+            'date' => $date,
+            'romanDate' => $romanDate,
         );
     }
 }
