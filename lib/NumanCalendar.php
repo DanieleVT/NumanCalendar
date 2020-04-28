@@ -353,6 +353,8 @@ class NumanCalendar {
             // Ultimo sottociclo: sono bisestili il 19°, 22° e 24° anno
             if (in_array($yearInCicle, [19,22,24])) return TRUE;
         }
+                
+        return FALSE;
     }
     
     /**
