@@ -51,7 +51,7 @@ for ($i=0;$i<=10000;$i++){
         $year = rand(-4713, 2020);
         echo sprintf("\nData %s ", implode('/', [$day, $month, $year]));
         
-        if ($year >= 1582 && $month >= 10 && $day <= 15) 
+        if (gregoriantojd($month, $day, $year) >= 2299161) 
             $NC ->setGregorianDate($year, $month, $day);
         else
             $NC ->setJulianDate($year, $month, $day);
