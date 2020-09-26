@@ -19,14 +19,21 @@
  */
 class NumanCalendar {
     /*
-     * Calendar offset: is assumed to be the JD
+     * Calendar offset
+     * 
+     * Offset del calendario
+     */
+    const JD0 = 1459964;
+    
+    /*
+     * Roman date offset: is assumed to be the JD
      * of the beginning of the year of 
      * founding of Rome (April 21 753 BC), then
      * March, 1st, 753 BC
      * 
-     * Offset del calendario: 1 Marzo 753 AC
+     * Offset fondazione di Roma: 1 Marzo 753 AC
      */
-    const JD0 = 1446450;
+    const JDUC = 1446450;
     
     /**
      * Month names following Macrobius and Plutarch
@@ -263,9 +270,8 @@ class NumanCalendar {
         if($JD !== NULL) $this->setJD($JD);
         
         //calcolo il giorno sottraendo l'offset di inizio del calendario
-        $jd = $this->JD - self::JD0 + 1;
+        $jd = $this->JD - self::JD0;
 
-        $jd-=1;
         $cicle = (int)($jd / 8766);
         $days_in_cicle = $jd % 8766;
         $subcicle = (int)($days_in_cicle / 2930);
@@ -448,6 +454,9 @@ class NumanCalendar {
      * @return string
      */
     protected function romanDate(int $y, int $m, int $d){
+        // Add A.U.C offset
+        $y += (int)((self::JD0 - self::JDUC) / 365.25);
+        
         $ml = $this->days_in_months[$m-1];
         
         $nonae = ($ml == 31) ? 7 : 5;
@@ -486,11 +495,6 @@ class NumanCalendar {
         if ($n) $n = $this->numberToRomanRepresentation($n);
         $year = $this->numberToRomanRepresentation($y);
         $month = $this->getMonthName($m);
-        
-        /* 
-         * NB: the "A.U.C" suffix implicitly assumes the calendar
-         * offset to coincide with the date of the fundation of Rome.
-         */
         
         return implode(' ', [$pref, $n, $day, $month, $year, 'A.U.C.']);
     }

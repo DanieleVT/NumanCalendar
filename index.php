@@ -22,7 +22,7 @@ echo "\nCALENDARIO NUMANO";
     <th>Sottociclo</th>
   </tr>
 <?php
-for ($i=1446450; $i<=2458953; $i+=8766) {
+for ($i=$NC::JD0; $i<=2458953; $i+=8766) {
     // Data da JD
     $date = ($i >= 2299161) ? jdtogregorian($i) : jdtojulian($i);
     list($month, $day, $year) = explode('/', $date);
