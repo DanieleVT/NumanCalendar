@@ -102,6 +102,12 @@ class NumanCalendar {
      * @var int
      */
     protected $day;
+    
+    /**
+     * Nundinal lecter
+     * @var string
+     */
+    protected $nundinal;
 
     /******************************/
     
@@ -127,6 +133,10 @@ class NumanCalendar {
        
     public function getDay() {
         return $this->day;
+    }
+    
+    function getNundinal() {
+        return $this->nundinal;
     }
 
     /**
@@ -236,7 +246,8 @@ class NumanCalendar {
         $y = $this->year;
         $m = $this->month;
         $d = $this->day;
-        return $this->romanDate($y,$m,$d);
+        $nun = $this->nundinal;
+        return $this->romanDate($y,$m,$d,$nun);
     }
     
     /**
@@ -286,9 +297,13 @@ class NumanCalendar {
         //Anno 
         $year += (($cicle-1)*24);
         
+        //Lettera nundinale
+        $nundinal = chr(65 +($jd % 8));
+        
         $this->year = $year;
         $this->month = $month;
         $this->day = $day;
+        $this->nundinal = $nundinal;
         
         $this->year_in_cicle = $this->yearInCicle($year);     
     }
@@ -451,9 +466,10 @@ class NumanCalendar {
      * @param int $y
      * @param int $m
      * @param int $d
+     * @param string $nun  nundinal lecter
      * @return string
      */
-    protected function romanDate(int $y, int $m, int $d){
+    protected function romanDate(int $y, int $m, int $d, string $nun = NULL){
         // Add A.U.C offset
         $y += (int)((self::JD0 - self::JDUC) / 365.25);
         
@@ -496,7 +512,7 @@ class NumanCalendar {
         $year = $this->numberToRomanRepresentation($y);
         $month = $this->getMonthName($m);
         
-        return implode(' ', [$pref, $n, $day, $month, $year, 'A.U.C.']);
+        return implode(' ', [$nun, $pref, $n, $day, $month, $year, 'A.U.C.']);
     }
 
 }
