@@ -471,8 +471,9 @@ class NumanCalendar {
      */
     protected function romanDate(int $y, int $m, int $d, string $nun = NULL){
         // Add A.U.C offset
-        $y += (int)((self::JD0 - self::JDUC) / 365.25);
-        
+        $y_offset = explode('/',jdtojulian(self::JD0))[2] - explode('/',jdtojulian(self::JDUC))[2];
+        $y += $y_offset;
+
         $ml = $this->days_in_months[$m-1];
         
         $nonae = ($ml == 31) ? 7 : 5;
