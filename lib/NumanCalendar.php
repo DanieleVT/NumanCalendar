@@ -104,7 +104,7 @@ class NumanCalendar {
     protected $day;
     
     /**
-     * Nundinal lecter
+     * Nundinal letter
      * @var string
      */
     protected $nundinal;
@@ -298,7 +298,7 @@ class NumanCalendar {
         $year += (($cicle-1)*24);
         
         //Lettera nundinale
-        $nundinal = chr(65 +($jd % 8));
+        $nundinal = $this->nundinalLetter($days_in_cicle);
         
         $this->year = $year;
         $this->month = $month;
@@ -439,6 +439,31 @@ class NumanCalendar {
     }
     
     /**
+     * Evaluate the nundinal letter from days in cicle
+     * 
+     * @param int $daysInCicle
+     * @return string
+     */
+    protected function nundinalLetter(int $daysInCicle){
+        $daysInCicle = ($daysInCicle - 1) % 8766 + 1;
+
+        $i = 0;
+        for($y=1;$y<=24;$y++){
+            $yl = $this->yearLenghtInDays($y);
+            $i += $yl;
+            if ($i >= $daysInCicle){
+                $i -= $yl;
+                break;
+            }
+        }
+        $yr = $daysInCicle - $i;
+        
+        $nundinal = chr(65 +(($yr-1) % 8));
+        
+        return $nundinal;
+    }
+    
+    /**
      * Format number to Roman representation
      * 
      * @param int $number
@@ -466,7 +491,7 @@ class NumanCalendar {
      * @param int $y
      * @param int $m
      * @param int $d
-     * @param string $nun  nundinal lecter
+     * @param string $nun  nundinal letter
      * @return string
      */
     protected function romanDate(int $y, int $m, int $d, string $nun = NULL){
