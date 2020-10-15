@@ -23,7 +23,7 @@ class NumanCalendar {
      * 
      * Offset del calendario
      */
-    const JD0 = 1459964;
+    const JD0 = 1462158;
     
     /*
      * Roman date offset: is assumed to be the JD
@@ -59,7 +59,7 @@ class NumanCalendar {
      * Month lengths in days
      * @var int[] 
      */
-    protected $days_in_months = array(31,29,31,29,31,29,29,31,29,29,29,28,22);
+    protected $days_in_months = array(31,29,31,29,31,29,29,31,29,29,29,28,27);
  
     /**
      * Julian Day
@@ -151,7 +151,7 @@ class NumanCalendar {
             throw new InvalidArgumentException("The month cannot be smaller than 1, $month given");
         
         $i = $month -1;
-        $i = $i % $this->yearLenghtInMonths();
+        $i = $i % $this->yearLengthInMonths();
         
         return $this->months[$i];
     }
@@ -221,7 +221,7 @@ class NumanCalendar {
         return array(
             'yearInCicle' => $yearInCicle, 
             'leap' => $this->isLeapYear($yearInCicle),
-            'length' => $this->yearLenghtInDays($yearInCicle)
+            'length' => $this->yearLengthInDays($yearInCicle)
         );
     }
     
@@ -292,14 +292,11 @@ class NumanCalendar {
         $this->cicle = $cicle;
         $this->subcicle = $subcicle;
 
-        list($year, $month, $day) = $this->getNumanYMD($days_in_cicle);
+        list($year, $month, $day, $nundinal) = $this->getNumanYMD($days_in_cicle);
         
         //Anno 
         $year += (($cicle-1)*24);
-        
-        //Lettera nundinale
-        $nundinal = $this->nundinalLetter($days_in_cicle);
-        
+                
         $this->year = $year;
         $this->month = $month;
         $this->day = $day;
@@ -314,7 +311,7 @@ class NumanCalendar {
      * @param int $yearInCicle
      * @return int
      */
-    protected function yearLenghtInMonths(int $yearInCicle=NULL){
+    protected function yearLengthInMonths(int $yearInCicle=NULL){
         if ($yearInCicle===NULL) $yearInCicle = $this->year_in_cicle;
         
         return ($this->isLeapYear($yearInCicle)) ? 13 : 12; 
@@ -326,7 +323,7 @@ class NumanCalendar {
      * @param int $yearInCicle
      * @return int
      */
-    protected function yearLenghtInDays(int $yearInCicle=NULL){
+    protected function yearLengthInDays(int $yearInCicle=NULL){
         if ($yearInCicle===NULL) $yearInCicle = $this->year_in_cicle;
         
         $length = 355;
@@ -342,6 +339,34 @@ class NumanCalendar {
             if ($yearInCicle % 4 == 0 && $yearInCicle != 24) {
                 $length++;
             }
+        }
+        
+        return $length;
+    }
+    
+    /**
+     * Return the month length
+     * 
+     * @param int $month
+     * @param int $yearInCicle
+     * @return int month length
+     */
+    protected function monthLength(int $month=NULL, int $yearInCicle=NULL){
+        if ($month === NULL) $month = $this->month;
+        if ($yearInCicle===NULL) $yearInCicle = $this->year_in_cicle;
+                
+        $i = $month -1;
+        $i = $i % $this->yearLengthInMonths($yearInCicle);
+        
+        $length = $this->days_in_months[$i];
+        
+        // Leap year: for the intercalation we use the  Michels hypotesis:
+        // Mercedonius length is fixed 27-day, and started either on the day 
+        // after the Terminalia (23rd day of Februarius) for a 22 day intercalation, 
+        // or on the following day, for a 23-day one
+        // (A. K. Michels, The Calendar of the Roman Republic 160ff)
+        if($month == 12 && $this->isLeapYear($yearInCicle)){
+            $length-=(($yearInCicle % 4 == 0 && $yearInCicle != 24) ? 4 : 5);
         }
         
         return $length;
@@ -393,11 +418,13 @@ class NumanCalendar {
     /**
      * Given the number of days past from the 
      * beginning of the cycle, provides
-     * year, month and day of the current cycle.
+     * year, month, day and nundinal letter 
+     * of the current cycle.
      * 
      * Dato il numero di giorni trascorsi 
      * dall'inizio del ciclo, stima
-     * anno, mese e giorno del ciclo corrente.
+     * anno, mese, giorno e lettera nundinale
+     * del ciclo corrente.
      * 
      * @param int $daysInCicle
      * @return int[]
@@ -408,7 +435,7 @@ class NumanCalendar {
         $year = 1;
         $i = 0;
         for($y=1;$y<=24;$y++){
-            $yl = $this->yearLenghtInDays($y);
+            $yl = $this->yearLengthInDays($y);
             $i += $yl;
             if ($i >= $daysInCicle){
                 $i -= $yl;
@@ -420,10 +447,8 @@ class NumanCalendar {
         
         $month = 1;
         $i = 0;
-        for ($m=1;$m<=$this->yearLenghtInMonths($year);$m++){
-            $ml = $this->days_in_months[$m-1];
-            // Mercedonio di 23 giorni
-            if ($year % 4 == 0 && $year != 24 && $m == 13) $ml++;
+        for ($m=1;$m<=$this->yearLengthInMonths($year);$m++){
+            $ml = $this->monthLength($m, $this->yearInCicle($year));
             $i += $ml;
             if ($i >= $yr){
                 $i -= $ml;
@@ -435,34 +460,18 @@ class NumanCalendar {
         
         $day = $mr;
         
-        return array($year, $month, $day);
-    }
-    
-    /**
-     * Evaluate the nundinal letter from days in cicle
-     * 
-     * @param int $daysInCicle
-     * @return string
-     */
-    protected function nundinalLetter(int $daysInCicle){
-        $daysInCicle = ($daysInCicle - 1) % 8766 + 1;
-
-        $i = 0;
-        for($y=1;$y<=24;$y++){
-            $yl = $this->yearLenghtInDays($y);
-            $i += $yl;
-            if ($i >= $daysInCicle){
-                $i -= $yl;
-                break;
-            }
+        if ($month == 13){
+            /* The nundinal cycle is reset to A on Kal. Merc.
+             * to join with the Regifugium day (letter G)
+             */
+            $nundinal = chr(65 + (($mr+7) % 8));
+        } else {
+            $nundinal = chr(65 + (($yr-1) % 8));
         }
-        $yr = $daysInCicle - $i;
-        
-        $nundinal = chr(65 +(($yr-1) % 8));
-        
-        return $nundinal;
+ 
+        return array($year, $month, $day, $nundinal);
     }
-    
+        
     /**
      * Format number to Roman representation
      * 
@@ -495,11 +504,12 @@ class NumanCalendar {
      * @return string
      */
     protected function romanDate(int $y, int $m, int $d, string $nun = NULL){
+        // Month length
+        $ml = $this->monthLength($m, $this->yearInCicle($y));
+        
         // Add A.U.C offset
         $y_offset = explode('/',jdtojulian(self::JD0))[2] - explode('/',jdtojulian(self::JDUC))[2];
         $y += $y_offset;
-
-        $ml = $this->days_in_months[$m-1];
         
         $nonae = ($ml == 31) ? 7 : 5;
         $idus = ($ml == 31) ? 15 : 13;
