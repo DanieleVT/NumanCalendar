@@ -135,10 +135,27 @@ class NumanCalendar {
         return $this->day;
     }
     
-    function getNundinal() {
+    public function getNundinal() {
         return $this->nundinal;
     }
 
+    /**
+     * Return year from founding 
+     * of Rome (April 21 753 BC)
+     * 
+     * @param int $year
+     * @return int
+     */
+    public function getAUCYear(int $year = NULL) {
+        if ($year === NULL) $year = $this->year;
+        
+        // Add A.U.C offset
+        $y_offset = explode('/',jdtojulian(self::JD0))[2] - explode('/',jdtojulian(self::JDUC))[2];
+        $year += $y_offset;
+        
+        return $year;
+    }
+    
     /**
      * Return the month proper name
      * 
@@ -471,7 +488,7 @@ class NumanCalendar {
  
         return array($year, $month, $day, $nundinal);
     }
-        
+    
     /**
      * Format number to Roman representation
      * 
@@ -508,8 +525,7 @@ class NumanCalendar {
         $ml = $this->monthLength($m, $this->yearInCicle($y));
         
         // Add A.U.C offset
-        $y_offset = explode('/',jdtojulian(self::JD0))[2] - explode('/',jdtojulian(self::JDUC))[2];
-        $y += $y_offset;
+        $y = $this->getAUCYear($y);
         
         $nonae = ($ml == 31) ? 7 : 5;
         $idus = ($ml == 31) ? 15 : 13;
