@@ -183,7 +183,10 @@ class NumanFestivals extends NumanCalendar
             27 => ['Equirria'],
         ),
         //Mercedinus
-        13 => array(),
+        13 => array(
+            23 => ['Regifugium'],
+            27 => ['Equirria'],
+        ),
     );
 
     /**
@@ -214,7 +217,7 @@ class NumanFestivals extends NumanCalendar
     }
 
     /**
-     * Returns info about day
+     * Returns info about current day
      * @param int $y year number
      * @param int $m month number
      * @param int $d day number
@@ -228,24 +231,28 @@ class NumanFestivals extends NumanCalendar
         if ($m < 1 || $m > 13)
             throw new InvalidArgumentException("Invalid month number $m given!");
         
-        $ml = $this->days_in_months[$m-1];
-        if ($m == 13) $ml++;
-        
+        $ml = $this->monthLength($m, $this->yearInCicle($y));
+               
         if ($d < 1 || $d > $ml)
             throw new InvalidArgumentException("Invalid day number $d given!");
         
-        $fixed = $this->isFixedDay($d, $m);
-        $festival = $this->isFestival($d, $m);
-        $month = $this->getMonthName($m);
+        $this->setYMD($y, $m, $d);
+        
+        $fixed = $this->isFixedDay();
+        $festival = $this->isFestival();
+        $month = $this->getMonthName();
+        $nundinal = $this->getNundinal();
         $date = $this->getDMY();
-        $romanDate = $this->romanDate($y, $m, $d);
+        $romanDate = $this->getRomanDate();
         
         return array(
             'fixed' => $fixed,
             'festival' => $festival,
             'month' => $month,
+            'nundinal' => $nundinal,
             'date' => $date,
             'romanDate' => $romanDate,
         );
     }
+
 }

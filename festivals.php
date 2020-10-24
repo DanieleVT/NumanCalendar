@@ -41,12 +41,12 @@ $sc = $NF->getSubcicle();
     <th>Giorno fisso</th>
     <th>Festività</th>
     <th>Data numana formato romano</th>
-    <th>Anno</th>
+    <th>Anno del ciclo</th>
     <th>Ciclo</th>
     <th>Sottociclo</th>
   </tr>
 <?php
-for ($i=1446450; $i<=(1446450+8766); $i+=1) {
+for ($i=$NF::JD0; $i<=$NF::JD0+8766; $i+=1) {
     // Data da JD
     $date = ($i >= 2299161) ? jdtogregorian($i) : jdtojulian($i);
     list($month, $day, $year) = explode('/', $date);
@@ -56,7 +56,6 @@ for ($i=1446450; $i<=(1446450+8766); $i+=1) {
     $NF->setJD($i);
     $yi = $NF->getYearInfo();
     $di = $NF->getDayInfo();
-    $y = $NF->getYear();
     $c = $NF->getCicle();
     $sc = $NF->getSubcicle();
     ?>
@@ -66,8 +65,8 @@ for ($i=1446450; $i<=(1446450+8766); $i+=1) {
     <td><?php echo $NF->getDMY() ?></td>
     <td><?php echo $di['fixed'] ? $di['fixed'] : '--' ?></td>
     <td><?php echo $di['festival'] ? implode(', ',$di['festival']) : '--' ?></td>
-    <td><?php echo $di['date'] ?></td>
-    <td><?php echo sprintf("%s (%s)", $y, $yi['yearInCicle']) ?></td>
+    <td><?php echo $di['romanDate'] ?></td>
+    <td><?php echo $yi['yearInCicle'] ?></td>
     <td><?php echo $c ?></td>
     <td><?php echo $sc ?></td>
   </tr>
