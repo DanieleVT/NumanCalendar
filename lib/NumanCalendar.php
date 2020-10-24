@@ -110,7 +110,7 @@ class NumanCalendar {
     protected $nundinal;
 
     /******************************/
-    
+     
     public function getJD() {
         return $this->JD;
     }
@@ -174,58 +174,6 @@ class NumanCalendar {
     }
 
     /**
-     * Set the Julian Day
-     * 
-     * @param int $JD
-     * @throws InvalidArgumentException
-     */
-    public function setJD(int $JD) {
-        if ($JD < self::JD0)
-            throw new InvalidArgumentException(sprintf("Julian day value must be greater than or equal to %s", self::JD0));
-        
-        $this->JD = $JD;
-        
-        $this->JDToNuman();
-    }
-
-    /**
-     * Set the Julian Day from the gregorian date
-     * 
-     * @param int $year
-     * @param int $month
-     * @param int $day
-     * @throws InvalidArgumentException
-     */
-    public function setGregorianDate(int $year, int $month, int $day){
-        $JD = gregoriantojd($month, $day, $year);
-
-        if ($JD < self::JD0)
-            throw new InvalidArgumentException(sprintf("Gregorian date cannot be prior to %s", 
-                jdtogregorian(self::JD0)));
-        
-        $this->JD = $JD;
-        $this->JDToNuman();
-    }
-    
-    /**
-     * Set the Julian Day from the julian date
-     * 
-     * @param int $year
-     * @param int $month
-     * @param int $day
-     */
-    public function setJulianDate(int $year, int $month, int $day){
-        $JD = juliantojd($month, $day, $year);
-        
-        if ($JD < self::JD0)
-            throw new InvalidArgumentException(sprintf("Julian date cannot be prior to %s", 
-                jdtojulian(self::JD0)));
-         
-        $this->JD = $JD;
-        $this->JDToNuman();
-    }
-    
-    /**
      * Return info about year
      * @param int $year
      * @return mixed[]
@@ -253,7 +201,7 @@ class NumanCalendar {
         $y = $this->year;
         return sprintf("%02d/%02d/%04d", $d, $m, $y);
     }
-    
+     
     /*
      * Get the date in Roman format
      *      
@@ -266,6 +214,91 @@ class NumanCalendar {
         $nun = $this->nundinal;
         return $this->romanDate($y,$m,$d,$nun);
     }
+    
+    /******************************/
+    
+    /**
+     * Set the Julian Day
+     * 
+     * @param int $JD
+     * @throws InvalidArgumentException
+     */
+    public function setJD(int $JD) {
+        if ($JD < self::JD0)
+            throw new InvalidArgumentException(sprintf("Julian day value must be greater than or equal to %s", self::JD0));
+        
+        $this->JD = $JD;
+        
+        $this->JDToNuman();
+        
+        return $this;
+    }
+
+    /**
+     * Set the Julian Day from the gregorian date
+     * 
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @throws InvalidArgumentException
+     */
+    public function setGregorianDate(int $year, int $month, int $day){
+        $JD = gregoriantojd($month, $day, $year);
+
+        if ($JD < self::JD0)
+            throw new InvalidArgumentException(sprintf("Gregorian date cannot be prior to %s", 
+                jdtogregorian(self::JD0)));
+        
+        $this->JD = $JD;
+        $this->JDToNuman();
+        
+        return $this;
+    }
+    
+    /**
+     * Set the Julian Day from the julian date
+     * 
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     */
+    public function setJulianDate(int $year, int $month, int $day){
+        $JD = juliantojd($month, $day, $year);
+        
+        if ($JD < self::JD0)
+            throw new InvalidArgumentException(sprintf("Julian date cannot be prior to %s", 
+                jdtojulian(self::JD0)));
+         
+        $this->JD = $JD;
+        $this->JDToNuman();
+        
+        return $this;
+    }
+    
+    /**
+     * set th given numan year, month and day
+     * 
+     * @param int $year    numan year
+     * @param int $month   numan month
+     * @param int $day     day number
+     * @return $this
+     * @throws InvalidArgumentException
+     */
+    public function setYMD(int $year, int $month, int $day){
+        
+        if ($year < 1)
+            throw new InvalidArgumentException(sprintf("Invalid year %s provided", $year));
+        elseif($month < 1 || $month > count($this->months))
+            throw new InvalidArgumentException(sprintf("Invalid month %s provided", $month));
+        elseif($day < 1 || $day > 31)
+            throw new InvalidArgumentException(sprintf("Invalid day %s provided", $day));
+        
+        $this->YMDToNuman($year, $month, $day);
+        
+        return $this;
+    }
+    
+    /******************************/
     
     /**
      * Return fixed, if day is fixed, false otherwise
@@ -309,7 +342,7 @@ class NumanCalendar {
         $this->cicle = $cicle;
         $this->subcicle = $subcicle;
 
-        list($year, $month, $day, $nundinal) = $this->getNumanYMD($days_in_cicle);
+        list($year, $month, $day, $nundinal) = $this->numanYMD($days_in_cicle);
         
         //Anno 
         $year += (($cicle-1)*24);
@@ -320,6 +353,28 @@ class NumanCalendar {
         $this->nundinal = $nundinal;
         
         $this->year_in_cicle = $this->yearInCicle($year);     
+    }
+    
+    /**
+     * 
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     */
+    protected function YMDToNuman(int $year, int $month, int $day){
+        
+        $this->year_in_cicle = $this->yearInCicle($year);
+        
+        $this->year = $year;
+        $this->month = $month;
+        $this->day = $day;
+        
+        $this->cicle = (int)(($year-1) / 24) + 1;
+        $this->subcicle = (int)(($this->year_in_cicle-1) / 8) + 1;
+
+        $this->JD = $this->numantojd($month, $day, $year);
+        
+        $this->nundinal = $this->nundinalFromYMD($year, $month, $day);
     }
     
     /**
@@ -446,7 +501,7 @@ class NumanCalendar {
      * @param int $daysInCicle
      * @return int[]
      */
-    protected function getNumanYMD(int $daysInCicle){
+    protected function numanYMD(int $daysInCicle){
         $daysInCicle = ($daysInCicle - 1) % 8766 + 1;
 
         $year = 1;
@@ -487,6 +542,65 @@ class NumanCalendar {
         }
  
         return array($year, $month, $day, $nundinal);
+    }
+    
+    /**
+     * Evaluate nundinal letter from y, m and d
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @return string
+     */
+    protected function nundinalFromYMD(int $year, int $month, int $day){
+        $year = $this->yearInCicle($year);
+        
+        $d = 0;
+        for ($m=1;$m<$month;$m++){
+            $d+=$this->monthLength($m, $year);
+        }
+        
+        $d+=$day;
+        
+        if ($month == 13){
+            /* The nundinal cycle is reset to A on Kal. Merc.
+             * to join with the Regifugium day (letter G)
+             */
+            $nundinal = chr(65 + (($day+7) % 8));
+        } else {
+            $nundinal = chr(65 + (($d-1) % 8));
+        }
+        
+        return $nundinal;
+    }
+    
+    /**
+    * Converts a Numan date to Julian Day Count
+    * @param int $month The month as a number from 1 (for January) to 13 (for Intercalar)
+    * @param int $day   The day as a number from 1 to 31
+    * @param int $year  The year as a number between -4714 and 9999
+    *
+    * @return int The julian day for the given numan date as an integer.
+    */
+    protected function numantojd(int $month, int $day, int $year){
+        
+        // full cycles
+        $d = 8766*(int)(($year-1)/24);
+
+        // full years of current cicle
+        $yr = (int)(($year-1) % 24);
+        for ($y=1;$y<=$yr;$y++) {
+            $d+=$this->yearLengthInDays($y);
+        }
+        
+        // full months of current year
+        for($m=1;$m<$month;$m++){
+            $d+=$this->monthLength($m, $this->yearInCicle($year));
+        }
+        
+        // days of current month
+        $d+=$day;
+        
+        return $this::JD0 + $d -1;
     }
     
     /**
