@@ -19,8 +19,10 @@ Each year is composed by 12 months, and biyearly a leap month (named *Mercedoniu
 | November | 29 |
 | December | 29 | 
 | Ianuarius | 29 |
-| Februarius | 28 |
-| Mercedonius | 22 or 23 |
+| Februarius | 28 *(23 or 24 days if leap year)* |
+| Mercedonius | 27 |
+
+*For the intercalation we use the  Michels hypotesis (A. K. Michels, The Calendar of the Roman Republic 160ff): Mercedonius length is fixed 27-day, and started either on the day after the Terminalia (23rd day of Februarius) for a 22 day intercalation or on the following day, for a 23-day one.*
 
 The fixed days are:
 * **Kalendae**: the first day of each month (*new moon*)
@@ -28,7 +30,7 @@ The fixed days are:
 * **Idus**: the 15th day for long months, the 13th for the short ones (*full moon*)
 
 The length in days of the 13th month depends on the position of the year in the cicle and subcicle.
-The calendar is supposed to start the *1 March of 753 BC* (the year of Rome founding).
+The calendar is supposed to start the *4 March of 710 BC*, when the new moon fell exactly 25 days before the Vernal equinox (despite the traditional hypothesis of the Numa's calendar reform in *713 BC*), and then the Calendar preserve the date of *25 March* as the spring equinox date.
 
 | Subcicle | Year  | Days in Year | Leap days | Total days |
 | :----: | ----:| -----:|----:| -----:|
@@ -57,6 +59,10 @@ The calendar is supposed to start the *1 March of 753 BC* (the year of Rome foun
 |3|23|355||8389|
 |3|24|377|22|8766|
 
+### Nundinal letters
+
+The 8-day nundinal cicle (from *A* to *H*) starts with **A** letter at the *Kalendae* of March. Similarly to what is shown by the *Fasti Antiates Maiores*, for leap years there is a discontinuity in the nundinal cycle, coinciding with the beginning of the intercalary month.
+As in the case of the *Fasti Antiates Maiores* the *Mercedonius* begins with the letter **G**, in order to preserve the nundinal letter **E** of the *Regifugium*, in this case the nundinal cycle restarts from the letter **A** in such a way as to have the letter **G** for the *Regifugium* regardless from intercalation.
 
 ## Usage
 
@@ -86,7 +92,7 @@ $date = $NC->getDMY();
 
 /*
  * Get the Numan date in Roman traditional format.
- * For example, Kal. Martius IX A.U.C.
+ * For example, A Kal. Martius IX A.U.C.
  */
 $rdate = $NC->getRomanDate();
 ```
@@ -104,7 +110,7 @@ $NF->setGregorianDate((int)$y, (int)$m, (int)$d);
 // Array ( [0] => Veneralia ) 
 $festival = $NF->isFestival();
 
-// Array ( [fixed] => Kalendae [festival] => Array ( [0] => Veneralia ) [date] => Kal. Aprilis MMDCCLXXIII A.U.C. ) 
+// Array ( [fixed] => Kalendae [festival] => Array ( [0] => Veneralia ) [month] => Aprilis [nundinal] => H [date] => 01/02/0001 [romanDate] => H Kal. Aprilis XLIV A.U.C. ) 
 $di = $NF->getDayInfo();
 ```
 
