@@ -5,6 +5,25 @@
  */
 class NumanFestivals extends NumanCalendar 
 {
+    /**
+     * Fasti
+     */
+    const FASTUS = 'F';
+    
+    const FASTVS_PVBLICVS = 'FP';
+    
+    const COMITIALIS = 'C';
+    
+    const NEFASTVS = 'N';
+    
+    const NEFASTVS_PVBLICVS = 'NP';
+    
+    const ENDOTERCISVS = 'EN';
+    
+    const QVANDO_REX_COMITIAVIT_FAS = 'QRCF';
+    
+    const QVANDO_STERCVM_DELATVM_FAS = 'QSDF'; 
+    
     /*
      * Festivals
      */
@@ -21,7 +40,7 @@ class NumanFestivals extends NumanCalendar
             20 => ['Quinquatria'],
             21 => ['Quinquatria'],
             22 => ['Quinquatria'],
-            23 => ['Quinquatria'],
+            23 => ['Quinquatria','Tubilustrium'],
             24 => ['Tubilustrium'],
             30 => ['Salus'],
             31 => ['Luna'],
@@ -185,10 +204,165 @@ class NumanFestivals extends NumanCalendar
         //Mercedinus
         13 => array(
             23 => ['Regifugium'],
-            27 => ['Equirria'],
+            26 => ['Equirria'],
         ),
     );
 
+    /**
+     * Exceptions to the general schema of fasti
+     * @var array 
+     */
+    protected $fasti = array(
+        //March
+        1 => array(
+            1 => self::NEFASTVS_PVBLICVS,
+            14 => self::ENDOTERCISVS,
+            22 => self::NEFASTVS,
+            24 => self::FASTUS,
+        ),
+        //April
+        2 => array(
+            5 => self::NEFASTVS,
+            6 => self::NEFASTVS,
+            12 => self::NEFASTVS,
+            14 => self::NEFASTVS,
+            15 => self::NEFASTVS,
+            16 => self::NEFASTVS,
+            17 => self::NEFASTVS,
+            18 => self::NEFASTVS,
+            23 => self::FASTUS,
+            
+        ),
+        //May
+        3 => array(
+            7 => self::NEFASTVS,
+            9 => self::NEFASTVS,
+            11 => self::NEFASTVS,
+            13 => self::NEFASTVS,
+            16 => self::FASTUS,
+            22 => self::NEFASTVS,
+            24 => self::FASTUS,
+            29 => self::COMITIALIS,
+            30 => self::COMITIALIS,
+        ),
+        //June
+        4 => array(
+            1 => self::NEFASTVS,
+            5 => self::NEFASTVS,
+            6 => self::NEFASTVS,
+            7 => self::NEFASTVS,
+            8 => self::NEFASTVS,
+            9 => self::NEFASTVS,
+            10 => self::NEFASTVS,
+            12 => self::NEFASTVS,
+            14 => self::NEFASTVS,
+            15 => self::FASTUS,
+            20 => self::COMITIALIS,
+            24 => self::COMITIALIS,
+        ),
+        //Quintilis
+        5 => array(
+            1 => self::NEFASTVS,
+            2 => self::NEFASTVS,
+            6 => self::NEFASTVS,
+            7 => self::NEFASTVS,
+            8 => self::NEFASTVS,
+            9 => self::NEFASTVS,
+            10 => self::COMITIALIS,
+            11 => self::COMITIALIS,
+            12 => self::COMITIALIS,
+            13 => self::COMITIALIS,
+            20 => self::COMITIALIS,
+            24 => self::NEFASTVS,
+        ),
+        //Sextilis
+        6 => array(
+            19 => self::FASTVS_PVBLICVS,
+            22 => self::ENDOTERCISVS,
+        ),
+        //September
+        7 => array(
+            4 => self::COMITIALIS,
+            6 => self::FASTUS,
+            7 => self::COMITIALIS,
+            8 => self::COMITIALIS,
+            9 => self::COMITIALIS,
+            10 => self::COMITIALIS,
+            11 => self::COMITIALIS,
+            12 => self::NEFASTVS,
+            14 => self::FASTUS,
+            15 => self::NEFASTVS,
+            16 => self::COMITIALIS,
+            17 => self::COMITIALIS,
+            18 => self::COMITIALIS,
+            19 => self::COMITIALIS,
+        ),
+        //October
+        8 => array(
+            1 => self::NEFASTVS,
+            4 => self::COMITIALIS,
+            5 => self::COMITIALIS,
+            14 => self::ENDOTERCISVS,
+            16 => self::ENDOTERCISVS,
+        ),
+        //November
+        9 => array(
+            8 => self::COMITIALIS,
+            15 => self::COMITIALIS,
+            24 => self::COMITIALIS,
+        ),
+        //December
+        10 => array(
+            1 => self::NEFASTVS,
+            2 => self::NEFASTVS,
+            4 => self::COMITIALIS,
+            12 => self::ENDOTERCISVS,
+            15 => self::ENDOTERCISVS,
+            17 => self::ENDOTERCISVS,
+            18 => self::COMITIALIS,
+            19 => self::NEFASTVS,
+            22 => self::COMITIALIS,
+            24 => self::COMITIALIS,
+        ),
+        //January
+        11 => array(
+            3 => self::COMITIALIS,
+            14 => self::ENDOTERCISVS,
+            24 => self::COMITIALIS,
+            25 => self::COMITIALIS,
+            26 => self::COMITIALIS,
+        ),
+        //February
+        12 => array(
+            1 => self::NEFASTVS,
+            2 => self::NEFASTVS,
+            5 => self::NEFASTVS,
+            6 => self::NEFASTVS,
+            7 => self::NEFASTVS,
+            8 => self::NEFASTVS,
+            9 => self::NEFASTVS,
+            10 => self::NEFASTVS,
+            11 => self::NEFASTVS,
+            12 => self::NEFASTVS,
+            14 => self::NEFASTVS,
+            16 => self::ENDOTERCISVS,
+            18 => self::COMITIALIS,
+            19 => self::COMITIALIS,
+            20 => self::COMITIALIS,
+            21 => self::FASTUS,
+            22 => self::COMITIALIS,
+            // Regifugium
+            24 => self::NEFASTVS,
+            26 => self::ENDOTERCISVS,
+        ),
+        //Mercedinus
+        13 => array(
+            // Regifugium
+            23 => self::NEFASTVS,
+            25 => self::ENDOTERCISVS,
+        ),
+    );
+    
     /**
      * Returns if given day is festival
      * 
@@ -242,6 +416,7 @@ class NumanFestivals extends NumanCalendar
         $festival = $this->isFestival();
         $month = $this->getMonthName();
         $nundinal = $this->getNundinal();
+        $fastus = $this->getFastus();
         $date = $this->getDMY();
         $romanDate = $this->getRomanDate();
         
@@ -250,9 +425,84 @@ class NumanFestivals extends NumanCalendar
             'festival' => $festival,
             'month' => $month,
             'nundinal' => $nundinal,
+            'fastus' => $fastus,
             'date' => $date,
             'romanDate' => $romanDate,
         );
     }
 
+    /**
+     * Is a day fastus? This method implements a simple schema:
+     * - Festivals are genarally NP
+     * - Days following fixed days are fasti
+     * - Ordinary days are comitalis except for nefasti blocks
+     * 
+     * @param int $y year number
+     * @param int $m month number
+     * @param int $d day number
+     * @return string kind of fasti
+     * @throws InvalidArgumentException
+     */
+    public function getFastus(int $y = NULL, int $m = NULL, int $d = NULL){
+        if ($y === NULL) $y = $this->year;
+        if ($d === NULL) $d = $this->day;
+        if ($m === NULL) $m = $this->month;
+        
+        if ($m < 1 || $m > 13)
+            throw new InvalidArgumentException("Invalid month number $m given!");
+        
+        $ml = $this->monthLength($m, $this->yearInCicle($y));
+               
+        if ($d < 1 || $d > $ml)
+            throw new InvalidArgumentException("Invalid day number $d given!");
+        
+        if (isset($this->fasti[$m][$d]))
+            return $this->fasti[$m][$d];
+        
+        $this->setYMD($y, $m, $d);
+        
+        $fixed = $this->isFixedDay();
+        $festival = $this->isFestival();
+        
+        $ml = $this->monthLength($m, $this->yearInCicle($y));
+        
+        // Is previous day fixed ?
+        $previous_fixed = $d >1 ? $this->isFixedDay($d-1, $m) : FALSE;
+        
+        // Fixed days
+        if ($fixed) {
+            // Nonae are F
+            if ($fixed == 'Kalendae' || $fixed == 'Nonae')
+                return $this::FASTUS;
+            // Idus are NP
+            else
+                return $this::NEFASTVS_PVBLICVS;
+        }
+        // Festivals are genarally NP
+        if ($festival)
+            return $this::NEFASTVS_PVBLICVS;
+        /*********** Ordinary days **************/
+        // Following fixed days ...
+        if ($previous_fixed) {
+            // Days following fixed days are fasti
+            return $this::FASTUS;
+        }
+        // Days between 5 and 22 Apr are N
+        if($m == 2 && $d >=5 && $d <= 22)
+            return $this::NEFASTVS;
+        // Days between 1 and 9 Jul are N
+        elseif($m == 5 && $d <= 9)
+            return $this::NEFASTVS;
+        // 12 and 15 Sep are N (but, why?)
+        elseif($m == 7 && ($d == 12 || $d == 15))
+            return $this::NEFASTVS;
+        // Days between 1 and 3 Dec are N
+        elseif($m == 10 && $d <= 3)
+            return $this::NEFASTVS;
+        // Days between 1 and 14 Feb are N
+        elseif($m == 12 && $d <= 14)
+            return $this::NEFASTVS;
+        // Other days are comitalis
+        return $this::COMITIALIS;
+    }
 }
