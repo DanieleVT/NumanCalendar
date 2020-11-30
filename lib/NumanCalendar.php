@@ -172,6 +172,15 @@ class NumanCalendar {
         
         return $this->months[$i];
     }
+    
+    /**
+     * Return the month length in days
+     * @return int
+     */
+    public function getMonthLength(){
+  
+        return $this->monthLength();
+    }
 
     /**
      * Return info about year
