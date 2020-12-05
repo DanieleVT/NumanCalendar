@@ -378,11 +378,14 @@ class NumanFestivals extends NumanCalendar
         if ($m < 1 || $m > 13)
             throw new InvalidArgumentException("Invalid month number $m given!");
         
-        $ml = $this->days_in_months[$m-1];
-        if ($m == 13) $ml++;
+        $ml = $this->monthLength($m, $this->year_in_cicle);
         
         if ($d < 1 || $d > $ml)
             throw new InvalidArgumentException("Invalid day number $d given!");
+        
+        if ($this->yearLengthInDays() == 378)
+            // 24 Feb of leap years is not Regifugium
+            unset($this->festivals[12][24]);
         
         if (isset($this->festivals[$m][$d]))
             return $this->festivals[$m][$d];
@@ -455,6 +458,10 @@ class NumanFestivals extends NumanCalendar
                
         if ($d < 1 || $d > $ml)
             throw new InvalidArgumentException("Invalid day number $d given!");
+        
+        if ($this->yearLengthInDays() == 378)
+            // 24 Feb of leap years is not Regifugium
+            unset($this->fasti[12][24]);
         
         if (isset($this->fasti[$m][$d]))
             return $this->fasti[$m][$d];
